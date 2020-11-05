@@ -1,0 +1,9 @@
+allprojects {
+    group = "io.lpgph"
+    version = '1.0-SNAPSHOT'
+}
+
+subprojects {
+
+
+}

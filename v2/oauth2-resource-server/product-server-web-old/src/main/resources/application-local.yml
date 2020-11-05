@@ -1,0 +1,40 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:pubkey.pub
+#      client:
+#        registration:
+#          user-server:
+#            provider: user-server
+#            client-id: user
+#            client-secret: user
+#            authorization-grant-type: client_credentials
+#            scope: all
+#        provider:
+#          user-server:
+#            authorization-uri: http://192.168.0.173:8090/oauth/authorize
+#            token-uri: http://192.168.0.173:8090/oauth/token
+
+security:
+  oauth2:
+    client:
+      clientId: user
+      clientSecret: user
+      userAuthorizationUri: http://localhost:8090/oauth/authorize
+      grant-type: client_credentials
+      scope: all
+      access-token-uri: http://localhost:8090/oauth/token
+    resource:
+      userInfoUri: http://localhost:8090/user
+    authorization:
+      check-token-access: http://localhost:8090/oauth/check_token
+
+logging:
+  level:
+    org:
+      springframework: INFO
+    com:
+      alibaba:
+        nacos: ERROR

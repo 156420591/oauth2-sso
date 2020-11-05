@@ -1,0 +1,25 @@
+server:
+  #  address: 127.0.0.1
+  port: 8090
+  #  servlet:
+  #    context-path: /uaa
+  # 授权服务和客户端在同一个域名下会出现authorization_request_not_found错误 session=null 方案1 使用不同地址 2 修改session名称
+  servlet:
+    session:
+      cookie:
+        name: s1
+
+spring:
+  application:
+    name: uaa
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+encrypt:
+  key-store:
+    location: classpath:/test.jks
+    alias: test
+    secret: testpass
+    password: testpass

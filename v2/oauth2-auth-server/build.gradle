@@ -1,0 +1,138 @@
+plugins {
+    id "java"
+    id "idea"
+    id "eclipse"
+    id 'maven-publish'
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'com.bmuschko.docker-spring-boot-application' version '6.6.1'
+}
+
+description = "认证与授权服务器  user服务也放到这里 也可以考虑将用户和认证分离 单独部署网关"
+
+group = "io.lpgph"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+//定义目录结构
+sourceSets {
+    main {
+        java {
+            srcDir("src/main/java") // 指定源码目录
+        }
+        resources {
+            srcDirs = ["src/main/resources", "src/main/java"] //指定资源目录
+            includes = ["**/*"]
+            excludes = ["**/*.java,**/*.kt"]
+        }
+    }
+    test {
+        java {
+            srcDir("src/test/java") // 指定源码目录
+        }
+        resources {
+            srcDirs = ["src/test/resources", "src/test/java"] //指定资源目录
+            includes = ["**/*"]
+            excludes = ["**/*.java,**/*.kt"]
+        }
+    }
+}
+
+//定义jar包版本号
+ext {
+    set("jacksonVersion", "2.10.3")
+    set("springCloudVersion", "Hoxton.SR8")
+    set('springCloudAlibabaVersion', "2.2.3.RELEASE")
+
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
+    javadoc.options.encoding = "UTF-8"
+}
+
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    compile.exclude group: "junit", module: "junit"
+    compile.exclude module: 'spring-boot-starter-logging'
+    compile.exclude module: 'log4j'
+    compile.exclude module: 'slf4j-log4j12'
+}
+
+dependencies {
+
+    //##############################   spring cloud   ##############################
+
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config'
+    implementation 'com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery'
+
+//    implementation 'org.springframework.cloud:spring-cloud-starter-security'
+    implementation 'org.springframework.cloud:spring-cloud-starter-oauth2'
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+//    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+
+//    implementation('org.springframework.cloud:spring-cloud-starter-zipkin')
+    //熔断器依赖
+//    implementation("org.springframework.cloud:spring-cloud-starter-netflix-hystrix")
+    //##############################   spring boot   ##############################
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-log4j2")
+
+    // 支持jdk8+
+    implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:${jacksonVersion}")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    runtimeOnly("mysql:mysql-connector-java")
+
+
+    //自定义注解  映射配置文件
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+//    //使用lombok 简化
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+
+//docker {
+//    springBootApplication {
+//        baseImage = 'openjdk:8-alpine'
+//        maintainer = "lpgph"
+//        ports = [9090, 8081]
+//        tag = 'auth:1.0'
+//        jvmArgs = ['-Dspring.profiles.active=production','-Xms256m',  '-Xmx2048m']
+//    }
+//}
+

@@ -1,0 +1,17 @@
+server:
+  port: 8085
+  tomcat:
+    uri-encoding: UTF-8
+#  servlet:
+#      context-path: /sys
+#  address: 127.0.0.1
+
+spring:
+#    active: dev
+  application:
+    name: product
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

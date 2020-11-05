@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        maven { url "http://maven.aliyun.com/repository/gradle-plugin" }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'oauth2-sso'
+include('gateway')
+include('oauth2-authorization-server')
+include('oauth2-resource-server')
+include('oauth2-client')

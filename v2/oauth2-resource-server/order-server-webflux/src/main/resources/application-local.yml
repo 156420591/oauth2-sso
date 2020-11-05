@@ -1,0 +1,25 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:pubkey.pub
+      client:
+        registration:
+          order-server:
+            provider: order-server
+            client-id: order
+            client-secret: order
+            authorization-grant-type: client_credentials
+            scope: read,write
+        provider:
+          order-server:
+            authorization-uri: http://192.168.0.173:8090/oauth/authorize
+            token-uri: http://192.168.0.173:8090/oauth/token
+logging:
+  level:
+    org:
+      springframework: INFO
+    com:
+      alibaba:
+        nacos: ERROR

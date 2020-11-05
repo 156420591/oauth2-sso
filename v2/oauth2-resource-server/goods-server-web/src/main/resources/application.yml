@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: local
+#  main:
+#    allow-bean-definition-overriding: true
+#  http:
+#    encoding:
+#      charset: UTF-8
+#      enabled: true
+#      force: true
+  output:
+    ansi:
+      enabled: ALWAYS #控制台彩色输出
+
+#开启请求压缩功能
+feign:
+  compression:
+    request:
+      enabled: true #开启响应压缩功能
+      mime-types: text/xml;application/xml;application/json #指定压缩请求数据类型
+      min-request-size: 2048 #如果传输超过该字节，就对其进行压缩
+    response:
+      enabled: true

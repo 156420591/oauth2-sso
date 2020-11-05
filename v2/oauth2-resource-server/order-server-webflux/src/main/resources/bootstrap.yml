@@ -1,0 +1,13 @@
+server:
+  port: 8084
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  application:
+    name: order
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

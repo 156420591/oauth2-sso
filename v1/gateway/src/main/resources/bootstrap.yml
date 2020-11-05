@@ -1,0 +1,9 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        name: s3
+spring:
+  application:
+    name: gateway
