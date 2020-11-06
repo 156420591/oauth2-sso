@@ -20,7 +20,7 @@ public class SmsCodeAuthenticationSecurityConfig
 
   @Autowired private MobileUserDetailsService userDetailsService;
 
-  @Autowired private AuthenticationSuccessHandler loginAuthenticationSuccessHandler;
+//  @Autowired private AuthenticationSuccessHandler loginAuthenticationSuccessHandler;
 
   @Autowired private ISmsCodeService smsCodeService;
 
@@ -33,7 +33,7 @@ public class SmsCodeAuthenticationSecurityConfig
     //    smsCodeFilter.setPasswordParameter("code");
     //    smsCodeFilter.setFilterProcessesUrl("/login/phone");
     // 设置成功失败处理器
-    smsCodeFilter.setAuthenticationSuccessHandler(loginAuthenticationSuccessHandler);
+//    smsCodeFilter.setAuthenticationSuccessHandler(loginAuthenticationSuccessHandler);
     // 设置 provider
     SmsCodeAuthenticationProvider smsCodeAuthenticationProvider =
         new SmsCodeAuthenticationProvider();

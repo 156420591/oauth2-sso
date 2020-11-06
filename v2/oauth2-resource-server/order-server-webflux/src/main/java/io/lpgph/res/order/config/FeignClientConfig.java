@@ -47,17 +47,17 @@ public class FeignClientConfig {
     return () -> httpMessageConverters;
   }
 
-  @Bean
-  public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
-      ReactiveClientRegistrationRepository clientRegistrationRepository,
-      ReactiveOAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
-    AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager =
-        new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
-            clientRegistrationRepository, oAuth2AuthorizedClientService);
-    authorizedClientManager.setAuthorizedClientProvider(
-        new ClientCredentialsReactiveOAuth2AuthorizedClientProvider());
-    return authorizedClientManager;
-  }
+//  @Bean
+//  public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+//      ReactiveClientRegistrationRepository clientRegistrationRepository,
+//      ReactiveOAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+//    AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager =
+//        new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(
+//            clientRegistrationRepository, oAuth2AuthorizedClientService);
+//    authorizedClientManager.setAuthorizedClientProvider(
+//        new ClientCredentialsReactiveOAuth2AuthorizedClientProvider());
+//    return authorizedClientManager;
+//  }
 
   @Bean
   public RequestInterceptor oauth2FeignRequestInterceptor(
@@ -65,13 +65,13 @@ public class FeignClientConfig {
     return new OAuth2FeignRequestInterceptor(authorizedClientManager, "user-server");
   }
 
-  @Bean
-  public WebClient azureGraphAPIWebClient(
-      ReactiveOAuth2AuthorizedClientManager reactiveOAuth2AuthorizedClientManager) {
-    ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
-        new ServerOAuth2AuthorizedClientExchangeFilterFunction(
-            reactiveOAuth2AuthorizedClientManager);
-    oauth2Client.setDefaultClientRegistrationId("user-server");
-    return WebClient.builder().filter(oauth2Client).build();
-  }
+//  @Bean
+//  public WebClient azureGraphAPIWebClient(
+//      ReactiveOAuth2AuthorizedClientManager reactiveOAuth2AuthorizedClientManager) {
+//    ServerOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
+//        new ServerOAuth2AuthorizedClientExchangeFilterFunction(
+//            reactiveOAuth2AuthorizedClientManager);
+//    oauth2Client.setDefaultClientRegistrationId("user-server");
+//    return WebClient.builder().filter(oauth2Client).build();
+//  }
 }

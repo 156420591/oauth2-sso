@@ -1,12 +1,14 @@
 package io.lpgph.res.order.config;
 
 import io.lpgph.res.order.security.MergeAuthoritiesConverter;
-import io.lpgph.res.order.security.AuthorityReactiveAuthorizationManager;
+import io.lpgph.res.order.security.PathMatchReactiveAuthorizationManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -20,6 +22,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
 import java.security.interfaces.RSAPublicKey;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Slf4j
 @Configuration
@@ -48,17 +52,38 @@ public class SecurityConfig {
         http.authorizeExchange(
                 exchanges ->
                         exchanges
-                                .pathMatchers("/user/**")
-                                .hasAnyAuthority("SCOPE_USER")
-                                .pathMatchers("/seller/**")
-                                .hasAnyAuthority("SCOPE_SELLER")
-                                .pathMatchers("/buyer/**")
-                                .hasAnyAuthority("SCOPE_BUYER")
-                                .pathMatchers("/rpc/**")
-                                .hasAnyAuthority("SCOPE_RPC")
-                                .pathMatchers("/admin/**")
-                                .access(AuthorityReactiveAuthorizationManager.authenticated())
-                                .anyExchange()
+                                .pathMatchers("/web/**")  // 无需登录即可访问
+                                .permitAll()
+                                .pathMatchers("/rpc/**")   // 提供给客户端之间的远程调用接口
+                                .hasAuthority("SCOPE_RPC")
+                                .pathMatchers("/user/info") // 提供给授权认证客户端查询用户信息接口
+                                .authenticated()
+
+                                /*
+                                 * 一个系统对应多个APP
+                                 * A 商城系统  B 商家系统  那么A B 都可以访问用户信息  A 可以访问用户订单接口 商城商品接口 不能访问商家接口
+                                 * B 只能访问商家的订单接口  商家的商品接口
+                                 * 单点登录呢？
+                                 * 在访问
+                                 */
+                                .pathMatchers("/user/**")  // 提供普通用户接口  通过指定客户端的用户可以访问
+                                .hasAuthority("SCOPE_USER")
+
+                                // 商家是需要认证的 所以这里是角色
+                                .pathMatchers("/merchant/p/**") // 提供给商家接口公共接口
+                                .hasAuthority("ROLE_MERCHANT")
+                                .pathMatchers("/merchant/a/**")  // 开发者接口 需要权限认证
+                                .access(PathMatchReactiveAuthorizationManager.authenticated())
+
+                                // 开发者是需要认证的 所以这里是角色
+                                .pathMatchers("/dev/p/**") // 开发者接口 公共接口
+                                .hasAuthority("ROLE_DEV")
+                                .pathMatchers("/dev/a/**")  // 开发者接口 需要权限认证
+                                .access(PathMatchReactiveAuthorizationManager.authenticated())
+
+                                .pathMatchers("/admin/**")   // 提供管理员的接口  需要对请求进行权限验证
+                                .access(PathMatchReactiveAuthorizationManager.authenticated())
+                                .anyExchange()  // 其他剩下的接口 都需要认证 这里考虑是简单认证 还是复杂认证
                                 .authenticated())
                 .oauth2ResourceServer(
                         oauth2ResourceServer ->
@@ -66,7 +91,8 @@ public class SecurityConfig {
                                         jwt ->
                                                 jwt.jwtDecoder(jwtDecoder())
                                                         .jwtAuthenticationConverter(getJwtAuthenticationConverter())))
-                .oauth2Client(oAuth2ClientSpec -> jwtDecoder());
+//                .oauth2Client(spec -> jwtDecoder());
+                .oauth2Client(withDefaults());
         return http.build();
     }
 
@@ -92,7 +118,7 @@ public class SecurityConfig {
      */
     @Bean
     public ReactiveJwtDecoder jwtDecoder() {
-        //    NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(this.key).build();
+        //    NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(this.key).build()
         NimbusReactiveJwtDecoder jwtDecoder = NimbusReactiveJwtDecoder.withPublicKey(this.key).build();
         // 如果服务器之间时间不一致 可以设置时间差来解决
         //    OAuth2TokenValidator<Jwt> withClockSkew = new DelegatingOAuth2TokenValidator<>(

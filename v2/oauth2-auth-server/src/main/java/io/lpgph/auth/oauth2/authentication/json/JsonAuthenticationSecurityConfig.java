@@ -15,7 +15,7 @@ import javax.servlet.Filter;
 public class JsonAuthenticationSecurityConfig
     extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-  @Autowired private AuthenticationSuccessHandler loginAuthenticationSuccessHandler;
+//  @Autowired private AuthenticationSuccessHandler loginAuthenticationSuccessHandler;
 
   @Override
   public void configure(HttpSecurity http) throws Exception {
@@ -25,8 +25,8 @@ public class JsonAuthenticationSecurityConfig
     jsonUsernamePasswordAuthenticationFilter.setAuthenticationManager(
         http.getSharedObject(AuthenticationManager.class));
     // 设置成功失败处理器
-    jsonUsernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(
-        loginAuthenticationSuccessHandler);
+//    jsonUsernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(
+//        loginAuthenticationSuccessHandler);
     jsonUsernamePasswordAuthenticationFilter.setFilterProcessesUrl("/login/json");
     // jsonAuthenticationFilter.setAuthenticationFailureHandler(myAuthenticationSuccessHandler);
 

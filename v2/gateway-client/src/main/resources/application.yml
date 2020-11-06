@@ -17,19 +17,30 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-#        defaultFilters:
+      defaultFilters:
 #          - PreserveHostHeader # 将原始的http头部带上
 #          - TokenRelay
+          - TokenRelayWithRefresh
       routes:
-        - id: system
-          uri: lb://system
+        - id: product
+          uri: lb://product
           predicates:
             #            - Method=POST, PUT, PATCH, DELETE,GET
-            - Path=/sys/**
+            - Path=/product/**
           filters:
             - StripPrefix=1
-#            - TokenRelay
-            - TokenRelayWithRefresh
+        - id: goods
+          uri: lb://goods
+          predicates:
+            - Path=/goods/**
+          filters:
+            - StripPrefix=1
+        - id: order
+          uri: lb://order
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1
 
   security:
     oauth2:

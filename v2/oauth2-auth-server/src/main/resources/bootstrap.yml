@@ -7,7 +7,7 @@ server:
   servlet:
     session:
       cookie:
-        name: s1
+        name: s0
 
 spring:
   application:
