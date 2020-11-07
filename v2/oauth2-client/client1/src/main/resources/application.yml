@@ -17,6 +17,9 @@ logging:
 spring:
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:pubkey.pub
       client:
         registration:
           c1:

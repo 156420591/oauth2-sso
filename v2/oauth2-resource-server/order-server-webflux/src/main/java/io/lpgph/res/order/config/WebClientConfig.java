@@ -11,8 +11,7 @@ import org.springframework.security.oauth2.client.web.server.ServerOAuth2Authori
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * @author Rob Winch
- * @since 5.1
+ * 客户端配置
  */
 @Configuration
 public class WebClientConfig {

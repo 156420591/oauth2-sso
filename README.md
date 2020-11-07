@@ -36,6 +36,8 @@ server:
 ### 前后端分离
     https://segmentfault.com/a/1190000016583573 
     https://juejin.im/post/6844903974546456590
+    https://blog.csdn.net/u013642886/article/details/90697541
+    https://blog.csdn.net/qq_34997906/article/details/97007709
 ### 参考
     https://segmentfault.com/u/lenve/articles 
     https://segmentfault.com/u/awbeci/articles 
@@ -43,10 +45,10 @@ server:
 ### 其他
     https://www.baeldung.com/sso-spring-security-oauth2 
     https://github.com/Baeldung/spring-security-oauth/tree/master/oauth-sso 
-    
+
 ### Resource feign
     https://github.com/liangxiaobo/test-security-oauth2
-    
+
 ### 认证服务和授权服务
     整合则是 把授权服务和用户服务放到一起  分离反之
     认证放到用户这里  授权则调用auth

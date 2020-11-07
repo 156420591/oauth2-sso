@@ -18,6 +18,8 @@ public class CustomTokenEnhancer implements TokenEnhancer {
   public OAuth2AccessToken enhance(
       OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 
+
+    log.info("\n\n\n\n 认证请求信息 \n{}\n\n\n", JsonUtil.toJson(authentication.getOAuth2Request().getRequestParameters()));
     log.info("\n\n\n\n 添加token附加信息 \n{}\n\n\n", JsonUtil.toJson(authentication));
 
     if (authentication.getUserAuthentication()!=null ){

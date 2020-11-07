@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Web App</title>
+</head>
+<body>
+你好！
+<a href="http://localhost:8090/oauth/authorize?client_id=login&response_type=code&scope=all&redirect_uri=http://localhost:8085/login/oauth2/code/sys">第三方登录</a>
+<h1 th:text="${msg}"></h1>
+</body>
+</html>
