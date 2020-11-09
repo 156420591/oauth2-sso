@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+}
+
+
+group = 'io.lpgph'
+version = '0.0.1-SNAPSHOT'
+description = '客户端'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+ext {
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
+    javadoc.options.encoding = "UTF-8"
+}
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    compile.exclude group: "junit", module: "junit"
+    compile.exclude module: 'spring-boot-starter-logging'
+    compile.exclude module: 'log4j'
+    compile.exclude module: 'slf4j-log4j12'
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-log4j2")
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
+
+    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+
+    //使用lombok 简化
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+
+repositories {
+    jcenter()
+    mavenCentral()
+}

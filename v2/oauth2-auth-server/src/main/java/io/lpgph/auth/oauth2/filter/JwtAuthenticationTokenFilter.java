@@ -2,12 +2,14 @@ package io.lpgph.auth.oauth2.filter;
 
 import io.lpgph.auth.common.json.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.RequestFacade;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.BearerTokenExtractor;
 import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,6 +22,7 @@ import java.io.IOException;
 /**
  * @see
  *     org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationProcessingFilter
+ *     <p>// * GenericFilterBean
  */
 @Slf4j
 @Component
@@ -38,6 +41,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
+
+    log.info(
+        "\n\n当前请求头部内容 {}\n\n\n  {} \n\n\n", JsonUtil.toJson(request.getHeaderNames()),JsonUtil.toJson(request.getHeader("Authorization")));
+
     Authentication authentication = tokenExtractor.extract(request);
     if (authentication != null && authentication.getPrincipal() != null) {
       try {
