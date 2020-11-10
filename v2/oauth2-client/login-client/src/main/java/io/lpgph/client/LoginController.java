@@ -23,7 +23,7 @@ public class LoginController {
 
   private final ObjectMapper objectMapper;
 
-  /** 通过帐号密码登录 */
+  /** web通过帐号密码登录返回cookie */
   @PostMapping("/login")
   public Mono<Object> login(String username, String password, String clientId) {
     Mono<ClientRegistration> reactiveRegistration =
@@ -43,5 +43,23 @@ public class LoginController {
         .flatMap((response) -> response.bodyToMono(Object.class));
   }
 
-  // 客户端在拦截的时候 拦截认证token 通过认证token 生成当前客户端的认证token
+  /** APP通过帐号密码登录返回token */
+  @PostMapping("/login/app")
+  public Mono<Object> loginApp(String username, String password, String clientId) {
+    Mono<ClientRegistration> reactiveRegistration =
+        reactiveClientRegistrationRepository.findByRegistrationId(clientId);
+    ClientRegistration registration = reactiveRegistration.block();
+    if (registration == null) throw new RuntimeException("appName 错误");
+    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+    map.add("client_id", registration.getClientId());
+    map.add("client_secret", registration.getClientSecret());
+    map.add("grant_type", "password");
+    map.add("username", username);
+    map.add("password", password);
+    return webClient
+        .post()
+        .uri(registration.getProviderDetails().getTokenUri(), map)
+        .exchange()
+        .flatMap((response) -> response.bodyToMono(Object.class));
+  }
 }

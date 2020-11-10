@@ -9,7 +9,9 @@ server:
 logging:
   level:
     org:
-      springframework: INFO
+      springframework: TRACE
+#      springframework: INFO
+
     com:
       alibaba:
         nacos: ERROR
