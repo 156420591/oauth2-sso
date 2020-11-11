@@ -3,7 +3,6 @@ package io.lpgph.auth.oauth2.filter;
 import io.lpgph.auth.common.json.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.RequestFacade;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -12,7 +11,6 @@ import org.springframework.security.oauth2.provider.authentication.BearerTokenEx
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.header.HeaderWriterFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,18 +28,15 @@ import java.util.Enumeration;
  *     <p>// * GenericFilterBean OncePerRequestFilter 一次请求只通过一次filter，而不需要重复执行
  */
 @Slf4j
-public class JwtAuthenticationTokenFilter extends BasicAuthenticationFilter {
+@Component
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
   private final TokenStore tokenStore;
 
   private final TokenExtractor tokenExtractor;
 
-  public JwtAuthenticationTokenFilter(
-      TokenStore tokenStore, AuthenticationManager authenticationManager) {
-
-    super(authenticationManager);
+  public JwtAuthenticationTokenFilter(TokenStore tokenStore) {
     this.tokenStore = tokenStore;
-
     this.tokenExtractor = new BearerTokenExtractor();
   }
 
@@ -50,8 +45,7 @@ public class JwtAuthenticationTokenFilter extends BasicAuthenticationFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     log.info(
-        "\n\n当前请求\naccess_token\n  {}\nAuthorization\n  {}\ntest\n  {}\n\n",
-        JsonUtil.toJson(request.getHeader("access_token")),
+        "\n\n当前请求\n{}\n{}\n",
         JsonUtil.toJson(request.getHeader("Authorization")),
         JsonUtil.toJson(request.getHeader("test")));
 

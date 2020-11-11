@@ -10,7 +10,8 @@ logging:
   level:
     org:
       springframework: TRACE
-#      springframework: INFO
+    #        springframework: TRACE
+    #      springframework: INFO
 
     com:
       alibaba:
@@ -19,11 +20,11 @@ logging:
 spring:
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          public-key-location: classpath:pubkey.pub
       client:
         registration:
+          github:
+            client-id: 7bd561a5ebac00159502
+            client-secret: b380bcecaec19e0371e4aef93cbf403fbc8c10ac
           c1:
             provider: uaa
             client-id: client1

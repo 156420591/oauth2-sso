@@ -58,13 +58,11 @@ public class LoginController {
 
     String access_token = (String) resp.getBody().get("access_token");
     //        String refresh_token = resp.get("refresh_token");
-    log.info(
-        "\n\n\nHeader\n{}\nToken\n{}\n\n",
-        objectMapper.writeValueAsString(resp.getHeaders()),
-        objectMapper.writeValueAsString(resp.getBody()));
+    log.info("\n\n\n 客户端认证信息 \n{}\n\n", objectMapper.writeValueAsString(resp));
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + access_token);
+
     HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
     ResponseEntity<String> entity =
         restTemplate.exchange(
@@ -79,6 +77,8 @@ public class LoginController {
     log.info("\n\n\nAuthorization\n{}\n\n\n", auth);
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", auth);
+    headers.add("access_token", auth);
+    headers.add("test", auth);
     //    headers.add("Authorization", "Bearer " + auth);
     HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
     log.info("\n\n\nhttpEntity\n{}\n\n\n", httpEntity);
@@ -119,6 +119,7 @@ public class LoginController {
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + access_token);
+    headers.add("test", "tttttttt");
 
     MultiValueMap<String, String> authMap = new LinkedMultiValueMap<>();
     authMap.add("client_id", "login");

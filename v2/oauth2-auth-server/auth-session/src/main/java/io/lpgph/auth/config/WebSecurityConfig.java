@@ -1,5 +1,6 @@
 package io.lpgph.auth.config;
 
+import io.lpgph.auth.oauth2.filter.JwtAuthenticationTokenFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -67,6 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .frameOptions()
         .disable()
         .cacheControl();
+    http.addFilter(new JwtAuthenticationTokenFilter(authenticationManager()));
   }
 
   //    @Autowired

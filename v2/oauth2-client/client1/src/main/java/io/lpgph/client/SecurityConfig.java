@@ -13,24 +13,35 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-
   @Bean
   SecurityWebFilterChain configure(ServerHttpSecurity http) {
+
     http.authorizeExchange(
             (exchanges) ->
                 exchanges
                     //                                .pathMatchers("/login/**").permitAll()
                     .anyExchange()
                     .authenticated())
-            .httpBasic().and()
         .csrf()
         .disable()
         .cors(spec -> spec.configurationSource(corsConfigurationSource()))
         .oauth2Login(withDefaults());
-    //            .oauth2Client(oAuth2ClientSpec ->
-    //                    oAuth2ClientSpec.authorizationRequestRepository());
+    //            .oauth2Client(client->client.authenticationManager( ));
     return http.build();
   }
+
+  //  @Bean
+  //  public ReactiveOAuth2AccessTokenResponseClient responseClient(){
+  //    return
+  //  }
+
+  //  private ReactiveAuthenticationManager authenticationManager(){
+  //    ReactiveOAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>
+  // auth2AccessTokenResponseClient =  new WebClientReactiveAuthorizationCodeTokenResponseClient();
+  //    auth2AccessTokenResponseClient.re
+  //   return new
+  // OAuth2AuthorizationCodeReactiveAuthenticationManager(auth2AccessTokenResponseClient);
+  //  }
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {

@@ -1,8 +1,10 @@
 package io.lpgph.auth.oauth2.config;
 
 import io.lpgph.auth.oauth2.enhancer.CustomTokenEnhancer;
+import io.lpgph.auth.oauth2.filter.JwtAuthenticationTokenFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
