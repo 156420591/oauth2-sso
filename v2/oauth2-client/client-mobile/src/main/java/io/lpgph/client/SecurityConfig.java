@@ -31,21 +31,7 @@ public class SecurityConfig {
     //            .oauth2Client(client->client.authenticationManager( ));
     return http.build();
   }
-
-
-
-  //  @Bean
-  //  public ReactiveOAuth2AccessTokenResponseClient responseClient(){
-  //    return
-  //  }
-
-  //  private ReactiveAuthenticationManager authenticationManager(){
-  //    ReactiveOAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest>
-  // auth2AccessTokenResponseClient =  new WebClientReactiveAuthorizationCodeTokenResponseClient();
-  //    auth2AccessTokenResponseClient.re
-  //   return new
-  // OAuth2AuthorizationCodeReactiveAuthenticationManager(auth2AccessTokenResponseClient);
-  //  }
+ 
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {

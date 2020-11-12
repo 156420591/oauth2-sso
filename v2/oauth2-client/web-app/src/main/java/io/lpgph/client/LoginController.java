@@ -29,6 +29,94 @@ public class LoginController {
 
   @Autowired private RestTemplate restTemplate;
 
+  /** 通过帐号密码登录 */
+  @PostMapping("/login")
+  public Object login(String username, String password) throws Exception {
+    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+    map.add("client_id", "app");
+    map.add("client_secret", "app");
+    map.add("grant_type", "password");
+    map.add("username", username);
+    map.add("password", password);
+    //        Mono<Object> rsp = webClient.post().uri("http://192.168.0.173:8090/oauth/token",
+    // map).exchange().flatMap((response) -> response.bodyToMono(Object.class));
+    Map<String, String> resp =
+        restTemplate.postForObject("http://192.168.0.173:8090/oauth/token", map, Map.class);
+    log.info("\n\n\nresp\n{}\n\n\n", objectMapper.writeValueAsString(resp));
+    //        model.addAttribute("msg", resp);
+    return resp.get("access_token");
+  }
+
+  /** 通过帐号密码登录 */
+  @PostMapping("/login2")
+  public Object login2(String username, String password) throws Exception {
+    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+    map.add("username", username);
+    map.add("password", password);
+    ResponseEntity<Map> resp =
+        restTemplate.postForEntity("http://192.168.0.173:8090/login", map, Map.class);
+    log.info("\n\n\nresp\n{}\n\n\n", objectMapper.writeValueAsString(resp));
+
+    //    HttpEntity<Object> httpEntity = new HttpEntity<>(resp.getHeaders());
+    //    ResponseEntity<String> entity =
+    //            restTemplate.exchange(
+    //                    "http://192.168.0.173:8090/user", HttpMethod.GET, httpEntity,
+    // String.class);
+    //    // 授权以后获取用户信息  如果系统未注册则根据用户信息注册  如果已注册 则获取信息进行登录
+    //    log.info("\n\n\nUserInfo\n{}\n\n\n", entity.getBody());
+
+    return resp.getBody();
+  }
+
+  /**
+   * 通过认证token访问第三放资源 自动授权
+   *
+   * @param auth
+   * @throws Exception
+   */
+  @GetMapping("/login/c1")
+  public void loginClient(@RequestHeader("Authorization") String auth) throws Exception {
+    log.info("\n\n\nAuthorization\n{}\n\n\n", auth);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", auth);
+    headers.add("test", auth);
+    //    headers.add("Authorization", "Bearer " + auth);
+    HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+    log.info("\n\n\nhttpEntity\n{}\n\n\n", httpEntity);
+    ResponseEntity<String> rst =
+        restTemplate.exchange(
+            "http://localhost:8082/hello", HttpMethod.GET, httpEntity, String.class);
+    log.info("\n\n\nclient1\n{}\n\n\n", rst);
+  }
+
+  /**
+   * 获取授权码授权
+   *
+   * @param accessToken
+   * @throws Exception
+   */
+  @GetMapping("/login/c2")
+  public void loginClient2(@RequestHeader("Authorization") String accessToken) throws Exception {
+    log.info("\n\n\naccess_token\n{}\n\n\n", accessToken);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + accessToken);
+    headers.add("test", "tttttttt");
+
+    MultiValueMap<String, String> authMap = new LinkedMultiValueMap<>();
+    authMap.add("client_id", "client1");
+    authMap.add("response_type", "code");
+    authMap.add("redirect_uri", "http://localhost:8085/login/oauth2/code/sys");
+
+    HttpEntity<Object> httpEntity = new HttpEntity<>(authMap, headers);
+    log.info("\n\n\nhttpEntity \n{}\n\n\n", objectMapper.writeValueAsString(httpEntity));
+    ResponseEntity<Map> entity =
+        restTemplate.exchange(
+            "http://192.168.0.173:8090/oauth/authorize", HttpMethod.POST, httpEntity, Map.class);
+
+    log.info("获取授权后的token {}", objectMapper.writeValueAsString(entity));
+  }
+
   /**
    * 其他平台对接自己平台的授权认证模式
    *
@@ -43,8 +131,8 @@ public class LoginController {
 
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.add("code", code);
-    map.add("client_id", "login");
-    map.add("client_secret", "login");
+    map.add("client_id", "client1");
+    map.add("client_secret", "client1");
     map.add("redirect_uri", "http://localhost:8085/login/oauth2/code/sys");
     map.add("grant_type", "authorization_code");
     //        Object resp = webClient.post().uri("http://192.168.0.173:8090/oauth/token",
@@ -72,22 +160,6 @@ public class LoginController {
     return resp.getBody();
   }
 
-  @GetMapping("/login/client")
-  public void loginClient(@RequestHeader("Authorization") String auth) throws Exception {
-    log.info("\n\n\nAuthorization\n{}\n\n\n", auth);
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", auth);
-    headers.add("access_token", auth);
-    headers.add("test", auth);
-    //    headers.add("Authorization", "Bearer " + auth);
-    HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-    log.info("\n\n\nhttpEntity\n{}\n\n\n", httpEntity);
-    ResponseEntity<String> rst =
-        restTemplate.exchange(
-            "http://localhost:8081/hello", HttpMethod.GET, httpEntity, String.class);
-    log.info("\n\n\nclient1\n{}\n\n\n", rst);
-  }
-
   // https://login.m.taobao.com/newlogin/login.do?appName=taobao&fromSite=0
   // https://login.taobao.com/newlogin/login.do?appName=taobao&fromSite=0
 
@@ -97,91 +169,4 @@ public class LoginController {
   //    response.writeTo()
   //  }
 
-  /** 通过帐号密码登录 */
-  @PostMapping("/login")
-  public Object login(String username, String password) throws Exception {
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-
-    map.add("client_id", "app");
-    map.add("client_secret", "app");
-    map.add("grant_type", "password");
-    map.add("username", username);
-    map.add("password", password);
-    //        Mono<Object> rsp = webClient.post().uri("http://192.168.0.173:8090/oauth/token",
-    // map).exchange().flatMap((response) -> response.bodyToMono(Object.class));
-    Map<String, String> resp =
-        restTemplate.postForObject("http://192.168.0.173:8090/oauth/token", map, Map.class);
-    log.info("\n\n\nresp\n{}\n\n\n", objectMapper.writeValueAsString(resp));
-    //        model.addAttribute("msg", resp);
-    String access_token = resp.get("access_token");
-
-    log.info("\n\n\naccess_token\n{}\n\n\n", access_token);
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Bearer " + access_token);
-    headers.add("test", "tttttttt");
-
-    MultiValueMap<String, String> authMap = new LinkedMultiValueMap<>();
-    authMap.add("client_id", "login");
-    authMap.add("response_type", "code");
-    authMap.add("redirect_uri", "http://localhost:8085/login/oauth2/code/sys");
-
-    HttpEntity<Object> httpEntity = new HttpEntity<>(authMap, headers);
-
-    log.info("\n\n\nhttpEntity \n{}\n\n\n", objectMapper.writeValueAsString(httpEntity));
-
-    ResponseEntity<Map> entity =
-        restTemplate.exchange(
-            "http://192.168.0.173:8090/oauth/authorize", HttpMethod.POST, httpEntity, Map.class);
-
-    log.info("获取授权后的token {}", objectMapper.writeValueAsString(entity));
-
-    return access_token;
-  }
-
-  /** 通过帐号密码登录 */
-  @PostMapping("/login2")
-  public Object login2(String username, String password) throws Exception {
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-    map.add("username", username);
-    map.add("password", password);
-    ResponseEntity<Map> resp =
-        restTemplate.postForEntity("http://192.168.0.173:8090/login", map, Map.class);
-    log.info("\n\n\nresp\n{}\n\n\n", objectMapper.writeValueAsString(resp));
-
-    //    HttpEntity<Object> httpEntity = new HttpEntity<>(resp.getHeaders());
-    //    ResponseEntity<String> entity =
-    //            restTemplate.exchange(
-    //                    "http://192.168.0.173:8090/user", HttpMethod.GET, httpEntity,
-    // String.class);
-    //    // 授权以后获取用户信息  如果系统未注册则根据用户信息注册  如果已注册 则获取信息进行登录
-    //    log.info("\n\n\nUserInfo\n{}\n\n\n", entity.getBody());
-
-    return resp.getBody();
-  }
-
-  /** 通过帐号密码登录 */
-  @PostMapping("/login3")
-  public Object login3(String username, String password) throws Exception {
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-
-    map.add("client_id", "app");
-    map.add("client_secret", "app");
-    map.add("grant_type", "password");
-    map.add("username", username);
-    map.add("password", password);
-    ResponseEntity<Map> resp =
-        restTemplate.postForEntity("http://192.168.0.173:8090/oauth/token", map, Map.class);
-    log.info("\n\n\nresp\n{}\n\n\n", objectMapper.writeValueAsString(resp));
-
-    //    HttpEntity<Object> httpEntity = new HttpEntity<>(resp.getHeaders());
-    //    ResponseEntity<String> entity =
-    //            restTemplate.exchange(
-    //                    "http://192.168.0.173:8090/user", HttpMethod.GET, httpEntity,
-    // String.class);
-    //    // 授权以后获取用户信息  如果系统未注册则根据用户信息注册  如果已注册 则获取信息进行登录
-    //    log.info("\n\n\nUserInfo\n{}\n\n\n", entity.getBody());
-
-    return resp.getBody();
-  }
 }
