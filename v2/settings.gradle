@@ -8,14 +8,14 @@ pluginManagement {
 rootProject.name = 'login-service'
 
 include('api-gateway')
+include(':oauth2-auth-server:auth-token')
+include(':oauth2-auth-server:auth-session')
 include(':oauth2-client:client1')  // web同一一个登录客户端  mobile一个客户端
 include(':oauth2-client:client2')
 include(':oauth2-client:login-client')
 include(':oauth2-client:web-app')
 include(':oauth2-client:client-gateway')
-include(':oauth2-client:client-mobile')
-include(':oauth2-auth-server:auth-token')
-include(':oauth2-auth-server:auth-session')
+include(':oauth2-client:client-gateway2')
 include(':oauth2-resource-server:product-server-web-old')
 include(':oauth2-resource-server:goods-server-web')
 include(':oauth2-resource-server:order-server-webflux')

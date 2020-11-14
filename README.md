@@ -52,3 +52,6 @@ server:
 ### 认证服务和授权服务
     整合则是 把授权服务和用户服务放到一起  分离反之
     认证放到用户这里  授权则调用auth
+### 整合实例
+https://spring.io/guides/tutorials/spring-security-and-angular-js/
+https://github.com/spring-guides/tut-spring-security-and-angular-js/tree/master/oauth2

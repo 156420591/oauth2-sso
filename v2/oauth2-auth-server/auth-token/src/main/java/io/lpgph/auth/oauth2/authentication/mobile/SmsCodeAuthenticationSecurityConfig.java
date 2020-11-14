@@ -1,24 +1,23 @@
 package io.lpgph.auth.oauth2.authentication.mobile;
 
-import io.lpgph.auth.oauth2.MobileUserDetailsService;
 import io.lpgph.auth.oauth2.RegisterUserService;
 import io.lpgph.auth.oauth2.service.ISmsCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.Filter;
 
 @Component
 public class SmsCodeAuthenticationSecurityConfig
     extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-  @Autowired private MobileUserDetailsService userDetailsService;
+  @Autowired private UserDetailsService mobileUserDetailsService;
+
+  @Autowired private RegisterUserService  mobileRegisterService;
 
 //  @Autowired private AuthenticationSuccessHandler loginAuthenticationSuccessHandler;
 
@@ -37,8 +36,8 @@ public class SmsCodeAuthenticationSecurityConfig
     // 设置 provider
     SmsCodeAuthenticationProvider smsCodeAuthenticationProvider =
         new SmsCodeAuthenticationProvider();
-    smsCodeAuthenticationProvider.setUserDetailsService(userDetailsService);
-    smsCodeAuthenticationProvider.setRegisterUserService(userDetailsService);
+    smsCodeAuthenticationProvider.setUserDetailsService(mobileUserDetailsService);
+    smsCodeAuthenticationProvider.setRegisterUserService(mobileRegisterService);
     smsCodeAuthenticationProvider.setSmsCodeService(smsCodeService);
 
     http.authenticationProvider(smsCodeAuthenticationProvider)

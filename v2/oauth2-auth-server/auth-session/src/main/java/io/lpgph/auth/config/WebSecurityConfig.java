@@ -11,16 +11,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /** 登录只负责客户端授权登录 */
 @Slf4j
-@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -28,15 +30,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired private PasswordEncoder passwordEncoder;
 
+  @Autowired private CorsConfigurationSource corsConfigurationSource;
+
+  /*
+   * org.springframework.security.web.context.SecurityContextRepository;
+   * org.springframework.security.web.context.HttpSessionSecurityContextRepository
+   * 默认使用session来进行管理
+   */
+
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/login.html", "/css/**", "/js/**", "/images/**");
+    web.ignoring().antMatchers("/login.html", "/css/**", "/js/**", "/images/**", "/**.ico");
   }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers("/oauth/**", "/login/**")
+        .antMatchers("/oauth/**", "/login/**", "/")
         .permitAll()
         .anyRequest()
         .authenticated()
@@ -57,7 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .and()
         .cors() // 跨域 配置
-        .configurationSource(corsConfigurationSource())
+        .configurationSource(corsConfigurationSource)
+        //        .and()
+        //        .sessionManagement()
+        //        .sessionCreationPolicy(SessionCreationPolicy.NEVER)
         .and()
         .csrf()
         .disable()
@@ -73,25 +86,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   //    @Autowired
   //    private SecurityProperties securityProperties;
-
-  /** cors跨域 */
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration corsConfiguration = new CorsConfiguration();
-    corsConfiguration.addAllowedOrigin("*");
-    corsConfiguration.addAllowedHeader("*");
-    corsConfiguration.addAllowedMethod("*");
-    corsConfiguration.setAllowCredentials(true);
-    corsConfiguration.setMaxAge(3600L);
-    corsConfiguration.addExposedHeader("access-control-allow-methods");
-    corsConfiguration.addExposedHeader("access-control-allow-headers");
-    corsConfiguration.addExposedHeader("access-control-allow-origin");
-    corsConfiguration.addExposedHeader("access-control-max-age");
-    corsConfiguration.addExposedHeader("X-Frame-Options");
-    UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
-    configurationSource.registerCorsConfiguration("/**", corsConfiguration);
-    return configurationSource;
-  }
 
   /** 用户验证 */
   @Override

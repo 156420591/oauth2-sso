@@ -1,4 +1,4 @@
-package io.lpgph.client;
+package io.lpgph.gateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,6 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -30,10 +29,8 @@ public class SecurityConfig {
         .disable()
         .cors(spec -> spec.configurationSource(corsConfigurationSource()))
         .oauth2Login(withDefaults());
-    //            .oauth2Client(client->client.authenticationManager( ));
     return http.build();
   }
-
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {

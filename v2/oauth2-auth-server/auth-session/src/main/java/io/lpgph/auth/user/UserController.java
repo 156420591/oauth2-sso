@@ -14,4 +14,10 @@ public class UserController {
   public Principal user(Principal principal) {
     return principal;
   }
+
+
+  @GetMapping("/test")
+  public Principal test(Principal principal) {
+    return principal;
+  }
 }

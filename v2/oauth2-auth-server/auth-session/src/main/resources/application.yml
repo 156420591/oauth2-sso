@@ -9,8 +9,8 @@ spring:
   redis:
     port: 6379
     host: 127.0.0.1
-        # Redis服务器连接密码（默认为空）
-#    database:
+    # Redis服务器连接密码（默认为空）
+    #    database:
     password: root
     #    # 连接池最大连接数（使用负值表示没有限制）
     #    lettuce:
@@ -31,12 +31,20 @@ spring:
 #    sentinel:
 #      nodes:
 
+#security:
+#  oauth2:
+#    client:
+#      clientId: acme
+#      clientSecret: acmesecret
+#      authorized-grant-types: authorization_code,refresh_token,password
+#      scope: openid
 
 logging:
   level:
     org:
       #      springframework: TRACE
       springframework: INFO
+    io.lettuce.core: ERROR
     #      springframework: DEBUG
     com:
       alibaba:

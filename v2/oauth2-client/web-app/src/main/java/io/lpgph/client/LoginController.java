@@ -121,6 +121,8 @@ public class LoginController {
    * 其他平台对接自己平台的授权认证模式
    *
    * <p>如果自己平台之间单点登录的话 客户端和浏览器端还是使用cookie+session的模式
+   * <p> code传递到前端页面后 前端通过code请求后台获取认证token
+   * 生成token后将token
    *
    * <p>http://localhost:8090/oauth/authorize?client_id=login&response_type=code&scope=all&redirect_uri=http://localhost:8085/login/oauth2/code/sys
    */

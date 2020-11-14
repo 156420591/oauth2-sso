@@ -1,6 +1,7 @@
 package io.lpgph.auth.oauth2;
 
 import io.lpgph.auth.common.bean.RESTfulGrantedAuthority;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
-@Service
+@AllArgsConstructor
 public class CustomClientDetailsService implements ClientDetailsService {
 
-  @Autowired private PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {

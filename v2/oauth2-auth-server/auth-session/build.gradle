@@ -95,9 +95,12 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    runtimeOnly("mysql:mysql-connector-java")
+    // redis 关联
+    implementation("org.apache.commons:commons-pool2")
 
     implementation("org.springframework.session:spring-session-data-redis")
+
+    implementation 'org.springframework.session:spring-session-core'
 
     //自定义注解  映射配置文件
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
