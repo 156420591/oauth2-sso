@@ -3,6 +3,8 @@ package io.lpgph.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -20,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import static org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId;
 
 @Slf4j
 @AllArgsConstructor
@@ -52,6 +55,31 @@ public class HelloController {
         log.info("\n\n\nOAuth2User\n{}\n\n\n", objectMapper.writeValueAsString(oauth2User));
         return "hello";
     }
+
+
+//    @Value("${messages.base-uri}")
+//    private String messagesBaseUri;
+//
+//    @Autowired
+//    private WebClient webClient;
+//
+//    @GetMapping(value = "/authorize", params = "grant_type=authorization_code")
+//    public String authorization_code_grant(Model model) {
+//        String[] messages = retrieveMessages("messaging-client-auth-code");
+//        model.addAttribute("messages", messages);
+//        return "index";
+//    }
+//
+//    private String[] retrieveMessages(String clientRegistrationId) {
+//        return this.webClient
+//                .get()
+//                .uri(this.messagesBaseUri)
+//                .attributes(clientRegistrationId(clientRegistrationId))
+//                .retrieve()
+//                .bodyToMono(String[].class)
+//                .block();
+//    }
+
 
 
 

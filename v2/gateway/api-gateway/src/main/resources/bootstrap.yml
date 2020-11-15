@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  ssl:
+    key-store: classpath:test.p12
+    key-store-password: testpass
+    keyStoreType: PKCS12
+    keyAlias: test
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

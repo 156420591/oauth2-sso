@@ -1,0 +1,15 @@
+server:
+  port: 8081
+  ssl:
+    key-store: classpath:test.p12
+    key-store-password: testpass
+    keyStoreType: PKCS12
+    keyAlias: test
+  servlet:
+    session:
+      cookie:
+        name: s1
+
+spring:
+  application:
+    name: client-gateway1

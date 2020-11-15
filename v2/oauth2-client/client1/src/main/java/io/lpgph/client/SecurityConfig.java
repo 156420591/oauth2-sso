@@ -2,13 +2,14 @@ package io.lpgph.client;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -23,16 +24,16 @@ public class SecurityConfig {
                 exchanges
                     //                                .pathMatchers("/login/**").permitAll()
                     .anyExchange()
-                    .authenticated())
+                    .permitAll())
         .csrf()
         .disable()
+        .logout()
+        .disable()
         .cors(spec -> spec.configurationSource(corsConfigurationSource()))
-        .oauth2Login(withDefaults());
+        .oauth2Login(withDefaults()); // 启用SSO支持 相当于@EnableOAuth2Sso
     //            .oauth2Client(client->client.authenticationManager( ));
     return http.build();
   }
-
-
 
   //  @Bean
   //  public ReactiveOAuth2AccessTokenResponseClient responseClient(){
