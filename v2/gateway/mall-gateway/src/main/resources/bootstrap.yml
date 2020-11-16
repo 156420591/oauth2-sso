@@ -1,10 +1,22 @@
 server:
-  port: 8081
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+#  ssl:
+#    key-store: classpath:test.p12
+#    key-store-password: testpass
+#    keyStoreType: PKCS12
+#    keyAlias: test
   servlet:
     session:
       cookie:
-        name: s1
+        name: g1
 
 spring:
   application:
-    name: client-gateway1
+    name: mall-gateway
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

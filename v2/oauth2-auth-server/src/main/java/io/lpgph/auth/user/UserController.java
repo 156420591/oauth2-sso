@@ -10,11 +10,15 @@ import java.security.Principal;
 @RestController
 public class UserController {
 
+  @GetMapping("/")
+  public Principal index(Principal principal) {
+    return principal;
+  }
+
   @GetMapping("/user")
   public Principal user(Principal principal) {
     return principal;
   }
-
 
   @GetMapping("/test")
   public Principal test(Principal principal) {

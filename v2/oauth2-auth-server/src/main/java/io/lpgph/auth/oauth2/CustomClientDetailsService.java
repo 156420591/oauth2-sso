@@ -35,8 +35,8 @@ public class CustomClientDetailsService implements ClientDetailsService {
         // 授权模式 认证成功够跳转跳转页面 并携带授权码
         clientDetails.setRegisteredRedirectUri(
             Set.of(
+                "http://localhost:8080/login/oauth2/code/login-client",
                 "http://localhost:8081/login/oauth2/code/c1",
-                "http://localhost:8081/login/oauth2/code/login-client",
                 "http://localhost:8085/login/oauth2/code/sys"));
         break;
       case "client2":
@@ -49,21 +49,7 @@ public class CustomClientDetailsService implements ClientDetailsService {
         clientDetails.setRefreshTokenValiditySeconds(60 * 60);
         // 授权模式 认证成功够跳转跳转页面 并携带授权码
         clientDetails.setRegisteredRedirectUri(
-            Set.of(
-                "http://localhost:8081/login/oauth2/code/login-client",
-                "http://localhost:8082/login/oauth2/code/login-client",
-                "http://localhost:8082/login/oauth2/code/c2"));
-        break;
-      case "other":
-        clientDetails.setClientId("other"); // 第三方APP 认证
-        clientDetails.setClientSecret(passwordEncoder.encode("other"));
-        clientDetails.setAuthorizedGrantTypes(List.of("authorization_code", "refresh_token"));
-        clientDetails.setScope(List.of("user"));
-        clientDetails.setAccessTokenValiditySeconds(60 * 60 * 2);
-        clientDetails.setAccessTokenValiditySeconds(60 * 60 * 24 * 30);
-        // 授权模式 认证成功够跳转跳转页面 并携带授权码
-        clientDetails.setRegisteredRedirectUri(
-            Set.of("http://localhost:8085/login/oauth2/code/sys"));
+            Set.of("http://localhost:8082/login/oauth2/code/c2"));
         break;
       case "app":
         clientDetails.setClientId("app");

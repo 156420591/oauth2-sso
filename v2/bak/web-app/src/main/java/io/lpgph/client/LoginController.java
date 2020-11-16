@@ -38,10 +38,10 @@ public class LoginController {
     map.add("grant_type", "password");
     map.add("username", username);
     map.add("password", password);
-    //        Mono<Object> rsp = webClient.post().uri("http://192.168.0.173:8090/oauth/token",
+    //        Mono<Object> rsp = webClient.post().uri("http://localhost:8090/oauth/token",
     // map).exchange().flatMap((response) -> response.bodyToMono(Object.class));
     Map<String, String> resp =
-        restTemplate.postForObject("http://192.168.0.173:8090/oauth/token", map, Map.class);
+        restTemplate.postForObject("http://localhost:8090/oauth/token", map, Map.class);
     log.info("\n\n\nresp\n{}\n\n\n", objectMapper.writeValueAsString(resp));
     //        model.addAttribute("msg", resp);
     return resp.get("access_token");
@@ -54,7 +54,7 @@ public class LoginController {
     map.add("username", username);
     map.add("password", password);
     ResponseEntity<Map> resp =
-        restTemplate.postForEntity("http://192.168.0.173:8090/login", map, Map.class);
+        restTemplate.postForEntity("http://localhost:8090/login", map, Map.class);
     log.info("\n\n\nresp\n{}\n\n\n", objectMapper.writeValueAsString(resp));
 
     HttpHeaders headers = new HttpHeaders();
@@ -69,7 +69,7 @@ public class LoginController {
     log.info("\n\n\nhttpEntity \n{}\n\n\n", objectMapper.writeValueAsString(httpEntity));
     ResponseEntity<Map> entity =
         restTemplate.exchange(
-            "http://192.168.0.173:8090/oauth/authorize", HttpMethod.POST, httpEntity, Map.class);
+            "http://localhost:8090/oauth/authorize", HttpMethod.POST, httpEntity, Map.class);
 
     // 授权以后获取用户信息  如果系统未注册则根据用户信息注册  如果已注册 则获取信息进行登录
     log.info("获取授权后的返回信息 {}", objectMapper.writeValueAsString(entity));
@@ -95,14 +95,14 @@ public class LoginController {
     map.add("client_secret", "client1");
     map.add("redirect_uri", "http://localhost:8085/login/oauth2/code/sys");
     map.add("grant_type", "authorization_code");
-    //        Object resp = webClient.post().uri("http://192.168.0.173:8090/oauth/token",
+    //        Object resp = webClient.post().uri("http://localhost:8090/oauth/token",
     // map).exchange().flatMap((response) -> response.bodyToMono(Object.class)).block();
 
     //        Map<String, String>resp =
-    // restTemplate.postForObject("http://192.168.0.173:8090/oauth/token", map, Map.class);
+    // restTemplate.postForObject("http://localhost:8090/oauth/token", map, Map.class);
     ResponseEntity<Map> resp =
         restTemplate.postForEntity(
-            URI.create("http://192.168.0.173:8090/oauth/token"), map, Map.class);
+            URI.create("http://localhost:8090/oauth/token"), map, Map.class);
 
     log.info("\n\n\n 客户端认证信息 \n{}\n\n", objectMapper.writeValueAsString(resp));
 
@@ -115,14 +115,11 @@ public class LoginController {
     HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
     ResponseEntity<String> entity =
         restTemplate.exchange(
-            "http://192.168.0.173:8090/user", HttpMethod.GET, httpEntity, String.class);
+            "http://localhost:8090/user", HttpMethod.GET, httpEntity, String.class);
     // 授权以后获取用户信息  如果系统未注册则根据用户信息注册  如果已注册 则获取信息进行登录
     log.info("\n\n\nUserInfo\n{}\n\n\n", entity.getBody());
     return resp.getBody();
   }
-
-  // https://login.m.taobao.com/newlogin/login.do?appName=taobao&fromSite=0
-  // https://login.taobao.com/newlogin/login.do?appName=taobao&fromSite=0
 
   //  @GetMapping("/test")
   //  public void loginClient(ServerResponse response,@RequestHeader("Authorization") String auth)
@@ -175,7 +172,7 @@ public class LoginController {
   //    log.info("\n\n\nhttpEntity \n{}\n\n\n", objectMapper.writeValueAsString(httpEntity));
   //    ResponseEntity<Map> entity =
   //        restTemplate.exchange(
-  //            "http://192.168.0.173:8090/oauth/authorize", HttpMethod.POST, httpEntity,
+  //            "http://localhost:8090/oauth/authorize", HttpMethod.POST, httpEntity,
   // Map.class);
   //
   //    log.info("获取授权后的token {}", objectMapper.writeValueAsString(entity));

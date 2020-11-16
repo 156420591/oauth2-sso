@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -17,7 +16,6 @@ public class BasicConfig {
     return new BCryptPasswordEncoder();
     //    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
   }
-
 
   /** cors跨域 */
   @Bean
@@ -37,20 +35,4 @@ public class BasicConfig {
     configurationSource.registerCorsConfiguration("/**", corsConfiguration);
     return configurationSource;
   }
-
-
-
-//    @Bean
-//    public EmbeddedServletContainerFactory servletContainer() {
-//        TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
-//        tomcat.addAdditionalTomcatConnectors(createStandardConnector()); // 添加http
-//        return tomcat;
-//    }
-//
-//    // 配置http
-//    private Connector createStandardConnector() {
-//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-//        connector.setPort(8812);
-//        return connector;
-//    }
 }

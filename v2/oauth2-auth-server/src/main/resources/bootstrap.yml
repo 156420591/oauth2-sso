@@ -4,15 +4,15 @@ server:
   #  servlet:
   #    context-path: /uaa
   # 授权服务和客户端在同一个域名下会出现authorization_request_not_found错误 session=null 方案1 使用不同地址 2 修改session名称
-#  servlet:
-#    session:
-#      cookie:
-#        name: s0
-  ssl:
-    key-store: classpath:test.p12
-    key-store-password: testpass
-    keyStoreType: PKCS12
-    keyAlias: test
+  servlet:
+    session:
+      cookie:
+        name: s0
+#  ssl: # 开启HTTPS
+#    key-store: classpath:test.p12
+#    key-store-password: testpass
+#    keyStoreType: PKCS12
+#    keyAlias: test
 
 spring:
   application:

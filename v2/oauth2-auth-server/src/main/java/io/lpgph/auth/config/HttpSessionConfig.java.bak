@@ -1,0 +1,39 @@
+package io.lpgph.auth.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.session.MapSessionRepository;
+import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
+import org.springframework.session.web.http.CookieHttpSessionIdResolver;
+import org.springframework.session.web.http.HttpSessionIdResolver;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+@Configuration
+// @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60*60)
+@EnableSpringHttpSession // web
+public class HttpSessionConfig {
+
+  ////  https://github.com/spring-guides/tut-spring-security-and-angular-js.git
+  //  @Bean
+  //  public RedisTemplate<String, Serializable> redisCacheTemplate(
+  //      LettuceConnectionFactory redisConnectionFactory) {
+  //    RedisTemplate<String, Serializable> template = new RedisTemplate<>();
+  //    template.setKeySerializer(new StringRedisSerializer());
+  //    template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+  //    template.setConnectionFactory(redisConnectionFactory);
+  //    return template;
+  //  }
+
+  @Bean
+  public MapSessionRepository sessionRepository() {
+    return new MapSessionRepository(new ConcurrentHashMap<>());
+  }
+
+  // override the default of using cookies and instead use headers
+  @Bean
+  public HttpSessionIdResolver httpSessionIdResolver() {
+    //    return HeaderHttpSessionIdResolver.xAuthToken();
+    return new CookieHttpSessionIdResolver();
+  }
+}

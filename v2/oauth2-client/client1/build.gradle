@@ -12,6 +12,8 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 ext {
+    set("springCloudVersion", "Hoxton.SR8")
+
     compileJava.options.encoding = "UTF-8"
     compileTestJava.options.encoding = "UTF-8"
     javadoc.options.encoding = "UTF-8"
@@ -39,6 +41,8 @@ dependencies {
 
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+//    implementation 'org.springframework.session:spring-session-core'
 
     //使用lombok 简化
     compileOnly 'org.projectlombok:lombok'

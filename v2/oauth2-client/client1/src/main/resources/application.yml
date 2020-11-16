@@ -1,17 +1,15 @@
 server:
   port: 8081
   # 授权服务和客户端在同一个域名下会出现authorization_request_not_found错误 session=null 方案1 使用不同地址 2 修改session名称
-#  servlet:
-#    session:
-#      cookie:
-#        name: s1
+  servlet:
+    session:
+      cookie:
+        name: s1
 
 logging:
   level:
     org:
-      #      springframework: TRACE
-      springframework: INFO
-
+      springframework: INFO # TRACE
     com:
       alibaba:
         nacos: ERROR
@@ -30,9 +28,9 @@ spring:
             scope: all
         provider:
           uaa:
-            authorization-uri: http://192.168.0.173:8090/oauth/authorize
-            token-uri: http://192.168.0.173:8090/oauth/token
-            user-info-uri: http://192.168.0.173:8090/user
+            authorization-uri: http://localhost:8090/oauth/authorize
+            token-uri: http://localhost:8090/oauth/token
+            user-info-uri: http://localhost:8090/user
             user-name-attribute: name
-            jwk-set-uri: http://192.168.0.173:8090/token_keys
+            jwk-set-uri: http://localhost:8090/token_keys
 

@@ -14,8 +14,8 @@ spring:
             scope: read,write,user:write
         provider:
           user-server:
-            authorization-uri: http://192.168.0.173:8090/oauth/authorize
-            token-uri: http://192.168.0.173:8090/oauth/token
+            authorization-uri: http://localhost:8090/oauth/authorize
+            token-uri: http://localhost:8090/oauth/token
 
 logging:
   level:
