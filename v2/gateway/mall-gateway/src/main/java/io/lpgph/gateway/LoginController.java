@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2PasswordGrantRequest;
-import org.springframework.security.oauth2.client.endpoint.ReactiveOAuth2AccessTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.WebClientReactivePasswordTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
@@ -56,7 +54,7 @@ public class LoginController {
       new WebSessionServerSecurityContextRepository();
 
   @PostMapping("/login")
-  public Object login(LoginInfo loginInfo) throws JsonProcessingException {
+  public Object login(LoginInfo loginInfo) throws Exception {
     ClientRegistration registration =
         reactiveClientRegistrationRepository.findByRegistrationId(loginInfo.getAppId()).block();
     if (registration == null) throw new RuntimeException("registration not null!!!");
@@ -75,28 +73,14 @@ public class LoginController {
     return rps;
   }
 
-//  @PostMapping("/login2")
-//  public String index(
-//      Authentication authentication,
-//      HttpServerRequest serverRequest,
-//      HttpServerResponse serverResponse)
-//      throws Exception {
-//    //    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    if (authentication != null) {
-//      OAuth2AuthorizeRequest authorizeRequest =
-//          OAuth2AuthorizeRequest.withClientRegistrationId("login-client")
-//              .principal(authentication)
-//              .attributes(
-//                  attrs -> {
-//                    attrs.put(HttpServerRequest.class.getName(), serverRequest);
-//                    attrs.put(HttpServerResponse.class.getName(), serverResponse);
-//                  })
-//              .build();
-//      OAuth2AuthorizedClient authorizedClient =
-//          this.authorizedClientManager.authorize(authorizeRequest).block();
-//      OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
-//      log.info("accessToken  {} ", objectMapper.writeValueAsString(accessToken));
-//    }
-//    return "index";
-//  }
+  @PostMapping("/login2")
+  public Object login2(LoginInfo loginInfo) throws Exception {
+    ClientRegistration registration =
+            reactiveClientRegistrationRepository.findByRegistrationId(loginInfo.getAppId()).block();
+    if (registration == null) throw new RuntimeException("registration not null!!!");
+    ReactiveOAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient =
+            new WebClientReactiveAuthorizationCodeTokenResponseClient();
+
+    return null;
+  }
 }

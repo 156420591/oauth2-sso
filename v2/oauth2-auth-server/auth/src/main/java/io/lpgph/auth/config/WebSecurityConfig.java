@@ -1,25 +1,20 @@
 package io.lpgph.auth.config;
 
-import io.lpgph.auth.oauth2.filter.JwtAuthenticationTokenFilter;
+import io.lpgph.auth.oauth2.filter.JwtAuthorizationFilter;
+import io.lpgph.auth.oauth2.filter.TokenAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /** 登录只负责客户端授权登录 */
 @Slf4j
@@ -81,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .frameOptions()
         .disable()
         .cacheControl();
-    http.addFilter(new JwtAuthenticationTokenFilter(authenticationManager()));
+    http.addFilter(new JwtAuthorizationFilter(authenticationManager()));
   }
 
   //    @Autowired

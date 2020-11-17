@@ -26,7 +26,9 @@ spring:
           enabled: true
           lower-case-service-id: true
       defaultFilters:
-      #        - PreserveHostHeader # 将原始的http头部带上
+        #        - PreserveHostHeader # 将原始的http头部带上
+        - TokenRelay # 验证和刷新令牌
+        - RemoveRequestHeader=Cookie  # 清除Cookie 资源服务器不需要cookie 只需要token
       routes:
         - id: product
           uri: lb://product
@@ -35,39 +37,18 @@ spring:
             - Path=/product/**
           filters:
             - StripPrefix=1
-            - TokenRelay
         - id: goods
           uri: lb://goods
           predicates:
             - Path=/goods/**
           filters:
             - StripPrefix=1
-            - TokenRelay
         - id: order
           uri: lb://order
           predicates:
             - Path=/order/**
           filters:
             - StripPrefix=1
-            - TokenRelay
-        - id: api-order
-          uri: lb://order
-          predicates:
-            - Path=/api/order/**
-          filters:
-            - StripPrefix=2
-        - id: api-product
-          uri: lb://product
-          predicates:
-            - Path=/api/product/**
-          filters:
-            - StripPrefix=2
-        - id: api-goods
-          uri: lb://goods
-          predicates:
-            - Path=/api/goods/**
-          filters:
-            - StripPrefix=2
   security:
     oauth2:
       client:
@@ -94,6 +75,8 @@ spring:
             user-info-uri: http://localhost:8090/user
             user-name-attribute: name
             jwk-set-uri: http://localhost:8090/token_keys
+#            user-info-authentication-method: header
+
 
 logging:
   level:

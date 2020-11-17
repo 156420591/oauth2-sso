@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,8 @@ public class DefaultAuthenticationSuccessHandler implements AuthenticationSucces
   public void onAuthenticationSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
+
+
     Object principal = authentication.getPrincipal();
     log.info("\n\n\n 登录成功 {}\n\n\n", JsonUtil.toJson(authentication));
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);

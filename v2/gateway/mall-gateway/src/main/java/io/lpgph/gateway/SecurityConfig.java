@@ -55,6 +55,7 @@ public class SecurityConfig {
     corsConfiguration.addExposedHeader("access-control-allow-origin");
     corsConfiguration.addExposedHeader("access-control-max-age");
     corsConfiguration.addExposedHeader("X-Frame-Options");
+    corsConfiguration.addExposedHeader("Authorization");
     UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
     configurationSource.registerCorsConfiguration("/**", corsConfiguration);
     return configurationSource;
